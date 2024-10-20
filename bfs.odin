@@ -6,7 +6,6 @@ import "core:testing"
 import queue "core:container/queue"
 import math "core:math/linalg"
 
-
 bfs_path :: proc(start, goal: math.Vector2f32, grid: [][]int) -> Maybe([dynamic]math.Vector2f32) {
     directions := [?]math.Vector2f32 {
         {-1,0},{1,0},{0,-1},{0,1}
@@ -50,7 +49,6 @@ bfs_path :: proc(start, goal: math.Vector2f32, grid: [][]int) -> Maybe([dynamic]
 
     if found {
         path := [dynamic]math.Vector2f32{}
-        defer delete(path)
 
         current := goal
 
@@ -82,6 +80,8 @@ foo :: proc(t: ^testing.T) {
     }
 
     result, ok := bfs_path(start, end, grid).?
+    defer delete(result)
+
     testing.expect(t, ok == true, "failed to find path")
 }
 
@@ -97,5 +97,7 @@ bar :: proc(t: ^testing.T) {
     }
 
     result, ok := bfs_path(start, end, grid).?
+    defer delete(result)
+
     testing.expect(t, ok == false, "found unexpected path")
 }
